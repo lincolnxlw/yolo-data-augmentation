@@ -190,7 +190,7 @@ def draw_yolo(image, labels, file_name):
         box_voc = pbx.convert_bbox(tuple(yolo_normalized), from_type="yolo", to_type="voc", image_size=(W, H))
         cv2.rectangle(image, (box_voc[0], box_voc[1]),
                       (box_voc[2], box_voc[3]), (0, 0, 255), 1)
-    cv2.imwrite(f"bb_image/{file_name}.png", image)
+    cv2.imwrite(f"bb_image/{file_name}.jpg", image)
     # cv2.imshow(f"{file_name}.png", image)
     # cv2.waitKey(0)
 
@@ -282,7 +282,7 @@ def save_augmentation(trans_image, trans_bboxes, trans_file_name):
         if not has_negative_element(trans_bboxes):
             # Save augmented label and image
             save_aug_lab(trans_bboxes, CONSTANTS["out_lab_pth"], trans_file_name + ".txt")
-            save_aug_image(trans_image, CONSTANTS["out_img_pth"], trans_file_name + ".png")
+            save_aug_image(trans_image, CONSTANTS["out_img_pth"], trans_file_name + ".jpg")
             # Draw bounding boxes on the augmented image
             draw_yolo(trans_image, trans_bboxes, trans_file_name)
         else:
