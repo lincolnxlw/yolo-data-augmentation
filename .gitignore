@@ -1,3 +1,5 @@
 test.py
 get_yolo_aug.py
 .DS_Store
+temp/
+__pycache__/
