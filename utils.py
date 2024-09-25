@@ -263,7 +263,7 @@ def has_negative_element(matrix):
     return any(element < 0 for row in matrix for element in row)
 
 
-def save_augmentation(trans_image, trans_bboxes, trans_file_name):
+def save_augmentation(trans_image, trans_bboxes, trans_file_name, need_save_bb_image=False):
     """
     Saves the augmented label and image if no negative elements are found in the transformed bounding boxes.
 
@@ -284,7 +284,8 @@ def save_augmentation(trans_image, trans_bboxes, trans_file_name):
             save_aug_lab(trans_bboxes, CONSTANTS["out_lab_pth"], trans_file_name + ".txt")
             save_aug_image(trans_image, CONSTANTS["out_img_pth"], trans_file_name + ".jpg")
             # Draw bounding boxes on the augmented image
-            draw_yolo(trans_image, trans_bboxes, trans_file_name)
+            if need_save_bb_image:
+                draw_yolo(trans_image, trans_bboxes, trans_file_name)
         else:
             print("Found Negative element in Transformed Bounding Box...")
     else:
