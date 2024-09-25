@@ -1,5 +1,6 @@
 from utils import *
 import argparse
+from tqdm import tqdm
 
 
 def run_yolo_augmentor(need_save_bb_image=False):
@@ -12,7 +13,7 @@ def run_yolo_augmentor(need_save_bb_image=False):
     """
     imgs = [img for img in os.listdir(CONSTANTS["inp_img_pth"]) if is_image_by_extension(img)]
 
-    for img_num, img_file in enumerate(imgs):
+    for img_num, img_file in enumerate(tqdm(imgs, mininterval=1.0)):
         print(f"Processing image {img_num+1}: {img_file}")
         image, gt_bboxes, aug_file_name = get_inp_data(img_file)
         aug_img, aug_label = get_augmented_results(image, gt_bboxes)
