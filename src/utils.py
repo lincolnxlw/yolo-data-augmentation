@@ -1,12 +1,7 @@
 import albumentations as A
 import cv2
 import os
-import yaml
 import pybboxes as pbx
-
-
-with open("config.yaml", 'r') as stream:
-    CONSTANTS = yaml.safe_load(stream)
 
 
 def is_image_by_extension(file_name):
@@ -28,7 +23,7 @@ def is_image_by_extension(file_name):
     return file_extension in image_extensions
 
 
-def get_inp_data(img_file):
+def get_inp_data(img_file, config):
     """
     Get input data for image processing.
 
@@ -40,10 +35,10 @@ def get_inp_data(img_file):
 
     """
     file_name = os.path.splitext(img_file)[0]
-    aug_file_name = f"{file_name}_{CONSTANTS['transformed_file_name']}"
-    image = cv2.imread(os.path.join(CONSTANTS["inp_img_pth"], img_file))
-    lab_pth = os.path.join(CONSTANTS["inp_lab_pth"], f"{file_name}.txt")
-    gt_bboxes = get_bboxes_list(lab_pth, CONSTANTS['CLASSES'])
+    aug_file_name = f"{file_name}_{config['transformed_file_name']}"
+    image = cv2.imread(os.path.join(config["inp_img_pth"], img_file))
+    lab_pth = os.path.join(config["inp_lab_pth"], f"{file_name}.txt")
+    gt_bboxes = get_bboxes_list(lab_pth, config['CLASSES'])
     return image, gt_bboxes, aug_file_name
 
 
@@ -107,9 +102,16 @@ def get_bboxes_list(inp_lab_pth, classes):
     album_bb_lists = get_album_bb_lists("\n".join(lines), classes) if len(lines) > 1 else [get_album_bb_list("\n".join(lines), classes)]
     # Make sure values are valid
     album_bb_lists = [
-        [max(0, min(x_min, 1)), max(0, min(y_min, 1)), max(0, min(x_max, 1)), max(0, min(y_max, 1)), label]
-        for x_min, y_min, x_max, y_max, label in album_bb_lists
+        [
+            max(width / 2, min(x_center, 1 - width / 2)),
+            max(height / 2, min(y_center, 1 - height / 2)),
+            max(0, min(width, 1)),
+            max(0, min(height, 1)),
+            label
+        ]
+        for x_center, y_center, width, height, label in album_bb_lists
     ]
+    print(album_bb_lists)
 
     return album_bb_lists
 
@@ -268,7 +270,7 @@ def has_negative_element(matrix):
     return any(element < 0 for row in matrix for element in row)
 
 
-def save_augmentation(trans_image, trans_bboxes, trans_file_name, need_save_bb_image=False):
+def save_augmentation(trans_image, trans_bboxes, trans_file_name, need_save_bb_image=False, config=None):
     """
     Saves the augmented label and image if no negative elements are found in the transformed bounding boxes.
 
@@ -283,11 +285,11 @@ def save_augmentation(trans_image, trans_bboxes, trans_file_name, need_save_bb_i
     tot_objs = len(trans_bboxes)
     if tot_objs:
         # Convert bounding boxes to YOLO format
-        trans_bboxes = multi_obj_bb_yolo_conversion(trans_bboxes, CONSTANTS['CLASSES']) if tot_objs > 1 else [single_obj_bb_yolo_conversion(trans_bboxes[0], CONSTANTS['CLASSES'])]
+        trans_bboxes = multi_obj_bb_yolo_conversion(trans_bboxes, config['CLASSES']) if tot_objs > 1 else [single_obj_bb_yolo_conversion(trans_bboxes[0], config['CLASSES'])]
         if not has_negative_element(trans_bboxes):
             # Save augmented label and image
-            save_aug_lab(trans_bboxes, CONSTANTS["out_lab_pth"], trans_file_name + ".txt")
-            save_aug_image(trans_image, CONSTANTS["out_img_pth"], trans_file_name + ".jpg")
+            save_aug_lab(trans_bboxes, config["out_lab_pth"], trans_file_name + ".txt")
+            save_aug_image(trans_image, config["out_img_pth"], trans_file_name + ".jpg")
             # Draw bounding boxes on the augmented image
             if need_save_bb_image:
                 draw_yolo(trans_image, trans_bboxes, trans_file_name)
