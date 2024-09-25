@@ -219,14 +219,28 @@ def get_augmented_results(image, bboxes):
     Returns:
     - tuple: A tuple containing the augmented image and the transformed bounding boxes.
     """
-    # Define the augmentations
     transform = A.Compose([
-        A.RandomCrop(width=300, height=300),
+        A.Resize(width=1920, height=1080),
+        A.RandomCrop(width=960, height=960),
         A.HorizontalFlip(p=0.5),
-        A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0),
-        A.CLAHE(clip_limit=(0, 1), tile_grid_size=(8, 8), always_apply=True),
-        A.Resize(300, 300)
-    ], bbox_params=A.BboxParams(format='yolo'))
+        A.RandomBrightnessContrast(brightness_limit=0.3,
+                                   contrast_limit=0.3,
+                                   p=0.5),
+        A.CLAHE(clip_limit=(0, 1),
+                tile_grid_size=(8, 8),
+                p=0.5),
+        A.HueSaturationValue(hue_shift_limit=20,
+                             sat_shift_limit=30,
+                             val_shift_limit=20,
+                             p=0.5),
+        A.RandomSunFlare(flare_roi=(0, 0, 1, 0.5),
+                         angle_lower=0,
+                         angle_upper=1,
+                         num_flare_circles_lower=3,
+                         num_flare_circles_upper=5,
+                         src_radius=100,
+                         p=0.25),
+    ], bbox_params=A.BboxParams(format='yolo', min_visibility=0.5))
 
     # Apply the augmentations
     transformed = transform(image=image, bboxes=bboxes)

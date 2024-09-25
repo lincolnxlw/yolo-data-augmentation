@@ -2,4 +2,5 @@ test.py
 get_yolo_aug.py
 .DS_Store
 temp/
+bb_image/
 __pycache__/

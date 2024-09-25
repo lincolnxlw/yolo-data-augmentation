@@ -1,6 +1,6 @@
-inp_img_pth : temp/input/images
-inp_lab_pth : temp/input/labels
-out_img_pth : temp/output/images
-out_lab_pth : temp/output/labels
+inp_img_pth : /home/lincolnxlw/ml_ws/yolo-data-augmentation/temp/input/images
+inp_lab_pth : /home/lincolnxlw/ml_ws/yolo-data-augmentation/temp/input/labels
+out_img_pth : /home/lincolnxlw/ml_ws/yolo-data-augmentation/temp/output/images
+out_lab_pth : /home/lincolnxlw/ml_ws/yolo-data-augmentation/temp/output/labels
 transformed_file_name : aug_out
-CLASSES : [obj1, obj2, obj3, 'obj4']
+CLASSES : ['ball', 'human']
