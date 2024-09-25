@@ -5,7 +5,7 @@ import yaml
 import pybboxes as pbx
 
 
-with open("contants.yaml", 'r') as stream:
+with open("config.yaml", 'r') as stream:
     CONSTANTS = yaml.safe_load(stream)
 
 

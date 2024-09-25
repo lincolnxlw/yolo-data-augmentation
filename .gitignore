@@ -4,3 +4,4 @@ get_yolo_aug.py
 temp/
 bb_image/
 __pycache__/
+config.yaml
