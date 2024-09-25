@@ -105,6 +105,11 @@ def get_bboxes_list(inp_lab_pth, classes):
 
     lines = [line.strip() for line in yolo_str_labels.split("\n") if line.strip()]
     album_bb_lists = get_album_bb_lists("\n".join(lines), classes) if len(lines) > 1 else [get_album_bb_list("\n".join(lines), classes)]
+    # Make sure values are valid
+    album_bb_lists = [
+        [max(0, min(x_min, 1)), max(0, min(y_min, 1)), max(0, min(x_max, 1)), max(0, min(y_max, 1)), label]
+        for x_min, y_min, x_max, y_max, label in album_bb_lists
+    ]
 
     return album_bb_lists
 
@@ -245,7 +250,7 @@ def get_augmented_results(image, bboxes):
     # Apply the augmentations
     transformed = transform(image=image, bboxes=bboxes)
     transformed_image, transformed_bboxes = transformed['image'], transformed['bboxes']
-    
+
     return transformed_image, transformed_bboxes
 
 

@@ -13,7 +13,8 @@ def run_yolo_augmentor(need_save_bb_image=False,
     and saves the augmented images and labels to the output directories.
 
     """
-    imgs = [img for img in os.listdir(CONSTANTS["inp_img_pth"]) if is_image_by_extension(img)]
+    #imgs = [img for img in os.listdir(CONSTANTS["inp_img_pth"]) if is_image_by_extension(img)]
+    imgs = [img for img in os.listdir(CONSTANTS["inp_img_pth"])]
 
     for img_num, img_file in enumerate(tqdm(imgs, mininterval=1.0)):
         if is_test and img_num >= test_num:
