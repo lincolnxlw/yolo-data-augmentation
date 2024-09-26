@@ -52,6 +52,11 @@ if __name__ == "__main__":
     is_test = args.is_test
     test_num = args.test_num
 
+    if not os.path.exists(config["out_img_pth"]):
+        os.makedirs(config["out_img_pth"])
+    if not os.path.exists(config["out_lab_pth"]):
+        os.makedirs(config["out_lab_pth"])
+
     run_yolo_augmentor(need_save_bb_image=need_save_bb_image,
                        is_test=is_test,
                        test_num=test_num)
