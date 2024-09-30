@@ -234,20 +234,10 @@ def get_augmented_results(image, bboxes):
         A.RandomBrightnessContrast(brightness_limit=0.3,
                                    contrast_limit=0.3,
                                    p=0.5),
-        A.CLAHE(clip_limit=(0, 1),
-                tile_grid_size=(8, 8),
-                p=0.5),
         A.HueSaturationValue(hue_shift_limit=20,
                              sat_shift_limit=30,
                              val_shift_limit=20,
                              p=0.5),
-        A.RandomSunFlare(flare_roi=(0, 0, 1, 0.5),
-                         angle_lower=0,
-                         angle_upper=1,
-                         num_flare_circles_lower=3,
-                         num_flare_circles_upper=5,
-                         src_radius=100,
-                         p=0.25),
     ], bbox_params=A.BboxParams(format='yolo', min_visibility=0.5))
 
     # Apply the augmentations
