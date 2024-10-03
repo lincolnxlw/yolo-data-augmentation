@@ -38,8 +38,11 @@ def get_inp_data(img_file, config):
     aug_file_name = f"{file_name}_{config['transformed_file_name']}"
     image = cv2.imread(os.path.join(config["inp_img_pth"], img_file))
     lab_pth = os.path.join(config["inp_lab_pth"], f"{file_name}.txt")
+    if not os.path.exists(lab_pth):
+        print(f"No label file found for {img_file}")
+        return False, None, None, None
     gt_bboxes = get_bboxes_list(lab_pth, config['CLASSES'])
-    return image, gt_bboxes, aug_file_name
+    return True, image, gt_bboxes, aug_file_name
 
 
 def get_album_bb_list(yolo_bbox, class_names):

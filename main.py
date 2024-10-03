@@ -26,7 +26,9 @@ def run_yolo_augmentor(need_save_bb_image=False,
             break
 
         print(f"Processing image {img_num+1}: {img_file}")
-        image, gt_bboxes, aug_file_name = get_inp_data(img_file=img_file, config=config)
+        ret, image, gt_bboxes, aug_file_name = get_inp_data(img_file=img_file, config=config)
+        if not ret:
+            continue
         aug_img, aug_label = get_augmented_results(image=image, bboxes=gt_bboxes)
         if len(aug_img) and len(aug_label):
             save_augmentation(trans_image=aug_img,
