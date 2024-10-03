@@ -228,8 +228,8 @@ def get_augmented_results(image, bboxes):
     - tuple: A tuple containing the augmented image and the transformed bounding boxes.
     """
     transform = A.Compose([
-        A.Resize(width=1920, height=1080),
-        A.RandomCrop(width=960, height=960),
+        #A.Resize(width=1920, height=1080),
+        #A.RandomCrop(width=960, height=960),
         A.HorizontalFlip(p=0.5),
         A.RandomBrightnessContrast(brightness_limit=0.3,
                                    contrast_limit=0.3,
